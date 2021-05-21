@@ -10,4 +10,4 @@ Feature: buscar un vuelvo
     Then compruebo la reserva de ese vuelo
     Examples:
       | origin    | destino | ida | back | adults | child | type |
-      | Argentina | Brasil  | 22  | 3    | 1      | 1     | 2    |
+      | Argentina | Brasil  | 23  | 29   | 1      | 1     | 2    |
