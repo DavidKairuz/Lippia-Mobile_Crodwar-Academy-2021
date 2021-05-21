@@ -2,7 +2,8 @@
   "deviceName": "{{deviceName}}",
   "app": "{{app}}",
   "platformName": "Android",
-  "avd": "{{avd}}",
+  "appPackage": "com.cheaptickets",
   "resetKeyboard": "true",
-  "unicodeKeyboard": "true"
+  "unicodeKeyboard": "true",
+  "deviceId":"192.168.0.134:5555"
 }

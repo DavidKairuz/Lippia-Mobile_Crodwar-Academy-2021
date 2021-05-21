@@ -8,27 +8,21 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 /**
  * This class is based in the old format of Page objects. See the package services in the new format.
  */
-public class ApiDemoHome extends PageBaseMobile {
+public class PhpMobileHome extends PageBaseMobile {
 
-    private final String ACTION_BAR_XPATH = "//*[@resource-id='android:id/action_bar']";
-    private final String TEXT_VIEW_XPATH = "//android.widget.TextView";
+    public static final String VISA_BUTTON_XPATH = "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.support.v4.widget.DrawerLayout/android.widget.LinearLayout/android.widget.LinearLayout[2]/android.widget.FrameLayout/android.widget.ScrollView/android.widget.LinearLayout/android.widget.RelativeLayout/android.support.v4.view.ViewPager/android.widget.RelativeLayout/android.support.v7.widget.RecyclerView/android.widget.LinearLayout[3]/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.ImageView";
 
-    public ApiDemoHome(RemoteWebDriver driver) {
+
+    public PhpMobileHome(RemoteWebDriver driver) {
         super(driver);
         this.url = "";
     }
 
-    public String getTitle() {
-        return getWebElement(By.xpath(ACTION_BAR_XPATH)).findElement(By.xpath(TEXT_VIEW_XPATH)).getText();
+
+    //hago click en el boton de visa
+    public void clickButtonVisa() {
+        clickElement(By.xpath(VISA_BUTTON_XPATH));
     }
 
-    private WebElement getMenuElement(String menu) {
-        return getWebElement(By.xpath("//android.widget.TextView[@content-desc=" + "\"" + menu + "\"" + "]"));
-    }
-
-    public void clickMenuElement(String menu) {
-        WebElement element = getMenuElement(menu);
-        clickElement(element);
-    }
 
 }
