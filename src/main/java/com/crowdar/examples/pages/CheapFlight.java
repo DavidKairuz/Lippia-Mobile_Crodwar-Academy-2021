@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class CheapFlight extends PageBaseMobile {
+public class CheapFlight extends CheapBase {
 //origen y destino
     public static final String FROM_BUTTON_XPATH = "//android.widget.LinearLayout[@content-desc=\"Flying from. Button\"]/android.widget.LinearLayout/android.view.ViewGroup/android.widget.TextView";
     public static final String FROM_INPUT_ID = "com.cheaptickets:id/search_src_text";
@@ -93,14 +93,24 @@ public class CheapFlight extends PageBaseMobile {
         List<WebElement> mes = getWebElements(By.id(MONTH_ID));
         //busca la primer fecha en el calendario
         for (int i = 0; i < mes.size(); i++) {
-            if (mes.contains(fecha1)) {
-                mes.get(i).click();
+            WebElement element = mes.get(i);
+             String namefecha= element.getAttribute("content-desc");
+            if (namefecha.contains(fecha1)) {
+                System.out.println(element.getText());
+                element.click();
+            }else{
+                System.out.println("Eror no se encontro");
             }
         }
         //busca la segunda fecha en el calendario
         for (int i = 0; i < mes.size(); i++) {
-            if (mes.contains(fecha2)) {
-                mes.get(i).click();
+            WebElement element = mes.get(i);
+            String namefecha= element.getAttribute("content-desc").toString();
+            if (namefecha.contains(fecha2)) {
+                System.out.println(element.getText());
+                element.click();
+            }else{
+                System.out.println("Eror no se encontro");
             }
         }
         //clickElement(By.id(DONECalendar_BUTTON_ID));

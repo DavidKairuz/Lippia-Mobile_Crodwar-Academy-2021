@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 
-public class CheapHome extends PageBaseMobile {
+public class CheapHome extends CheapBase {
 
     public static final String TEXT_TITLE_ACCID = "CheapTickets";
     public static final String FLIGHT_BUTTON_ACCID = "Flights Button";
