@@ -31,7 +31,7 @@ public class CheapTicketsSteps extends PageSteps {
     }
 
     @And("selecciono el from '(.*)' , to '(.*)', fecha de ida '(.*)' regreso '(.*)',cantidad de adultos'(.*)',chicos'(.*)' y tipo servicio '(.*)'")
-    public void completoCamposRequeridos(String ida, String vuelta,Integer fida,Integer fvuelta, Integer adults, Integer chicos,Integer tipo) {
+    public void completoCamposRequeridos(String ida, String vuelta,String fida,String fvuelta, Integer adults, Integer chicos,Integer tipo) {
         Injector._page(CheapFlight.class).completFromAndTo(ida, vuelta);
         Injector._page(CheapFlight.class).setDates(fida,fvuelta);
         Injector._page(CheapFlight.class).setTraveler(adults, chicos);

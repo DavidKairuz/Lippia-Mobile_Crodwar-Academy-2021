@@ -9,5 +9,5 @@ Feature: buscar un vuelvo
     And selecciono un elemento de la lista
     Then compruebo la reserva de ese vuelo
     Examples:
-      | origin    | destino | ida | back | adults | child | type |
-      | Argentina | Brasil  | 23  | 29   | 1      | 1     | 2    |
+      | origin    | destino | ida   | back  | adults | child | type |
+      | Argentina | Brasil  | 23/05 | 29/05 | 1      | 1     | 2    |
