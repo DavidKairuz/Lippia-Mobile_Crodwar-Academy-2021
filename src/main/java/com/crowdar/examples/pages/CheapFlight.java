@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CheapFlight extends CheapBase {
-//origen y destino
+    //origen y destino
     public static final String FROM_BUTTON_XPATH = "//android.widget.LinearLayout[@content-desc=\"Flying from. Button\"]/android.widget.LinearLayout/android.view.ViewGroup/android.widget.TextView";
     public static final String FROM_INPUT_ID = "com.cheaptickets:id/search_src_text";
     public static final String TO_BUTTON_XPATH = "//android.widget.LinearLayout[@content-desc=\"Flying to. Button\"]/android.widget.LinearLayout/android.view.ViewGroup/android.widget.TextView";
@@ -26,7 +26,9 @@ public class CheapFlight extends CheapBase {
     public static final String MONTH_ID = "com.cheaptickets:id/month";
     public static final String DAY_MONTH_ACCID = "Friday, May 28 button";
     public static final String MOUNTHCURRENT_ACCID = "May 2021 current month";
+    public static final String MONTHCURRENT_ID = "com.cheaptickets:id/current_month";
     public static final String DONECalendar_BUTTON_ID = "";
+    public static final String NEXTMOUTH_BUTTON_ID = "com.cheaptickets:id/next_month";
 
     public static final String TRAVELER_BUTTON_XPATH = "//android.widget.LinearLayout[@content-desc=\"Number of travelers. Button. Opens dialog. 1 traveler\"]/android.widget.LinearLayout/android.view.ViewGroup/android.widget.EditText";
     public static final String ADULTADD_BUTTON_XPATH = "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.widget.ScrollView/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.ImageButton";
@@ -92,31 +94,36 @@ public class CheapFlight extends CheapBase {
         isElementPresent(By.id(MOUNTHCURRENT_ACCID));
         List<WebElement> mes = getWebElements(By.id(MONTH_ID));
         //busca la primer fecha en el calendario
-        for (int i = 0; i < mes.size(); i++) {
-            WebElement element = mes.get(i);
-             String namefecha= element.getAttribute("content-desc");
-            if (namefecha.contains(fecha1)) {
-                System.out.println(element.getText());
-                element.click();
-            }else{
-                System.out.println("Eror no se encontro");
+
+
+        try {
+            for (int i = 0; i < mes.size(); i++) {
+                String element = mes.get(i).getAttribute("AccesibilityID");
+                //String namefecha = element.getAttribute("content-desc");
+                if (element.contains(fecha1)) {
+                    mes.get(i).click();
+                } else {
+                    System.out.println("Error no se encontro");
+                }
             }
+
+        } catch (Exception e) {
+            System.out.println("Error");
         }
+
         //busca la segunda fecha en el calendario
         for (int i = 0; i < mes.size(); i++) {
             WebElement element = mes.get(i);
-            String namefecha= element.getAttribute("content-desc").toString();
+            String namefecha = element.getAttribute("content-desc").toString();
             if (namefecha.contains(fecha2)) {
                 System.out.println(element.getText());
                 element.click();
-            }else{
-                System.out.println("Eror no se encontro");
+            } else {
+                System.out.println("Error no se encontro");
             }
         }
         //clickElement(By.id(DONECalendar_BUTTON_ID));
     }
-
-
 
 
     //refactoriza un elemento de una lista obtenida
@@ -134,20 +141,11 @@ public class CheapFlight extends CheapBase {
         } else {
             iteraClick(adult, ADULTADD_BUTTON_XPATH);
         }
-        // iteraClick(young,YOUGADD_BUTTON_XPATH);
+
         iteraClick(child, CHILDADD_BUTTON_XPATH);
         clickElement(MobileBy.id(DONEP_BUTTON_ID));
     }
 
-
-    public void iteraClick(Integer n, String xpt) {
-        if (n > 0) {
-            for (int i = 0; i < n; i++) {
-                clickElement(MobileBy.xpath(xpt));
-            }
-        }
-
-    }
 
     public void setPreferenseClass(Integer tipo) {
         //  clickElement(By.xpath(PREFERENCE_BUTTON_XPATH));
@@ -193,12 +191,13 @@ public class CheapFlight extends CheapBase {
 
             result = getMonth(smes) + " " + sfecha;
         }
-        String mes = fecha;
+        //  String mes = fecha;
         return result;
     }
 
+
     //recibe la fecha en su formato dd/mm y obtine el nombre del mes
-    public String getMonth(String smes) {
+    public String getMonth (String smes){
         String month = "";
         switch (smes) {
             case "01":
