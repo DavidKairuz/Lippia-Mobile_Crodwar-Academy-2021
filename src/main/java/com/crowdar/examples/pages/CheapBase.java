@@ -16,11 +16,13 @@ import java.util.Locale;
 public class CheapBase extends PageBaseMobile {
 
 
+
     public CheapBase(RemoteWebDriver driver) {
         super(driver);
         this.url = "";
     }
 
+    //realiza un numero de iteraciones
     public void iteraClick(Integer n, String xpt) {
         if (n > 0) {
             for (int i = 0; i < n; i++) {
@@ -30,60 +32,36 @@ public class CheapBase extends PageBaseMobile {
 
     }
 
+    //Date fecha = new Date(Calendar.getInstance().getTimeInMillis()); para la fecha actual
+    public String convertDateTravel(String sfecha){
+        String  fechaTexto ="";
+        try {
+            Date fecha = new SimpleDateFormat("dd/MM/yy").parse(sfecha);//tipo de formato que recibe
+            SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMMM dd ", Locale.US);//nuevo formato que queremos y para que lo devuelva en ingles
+            fechaTexto = formatter.format(fecha)+ "button";
+            return fechaTexto;
 
-    public String getDay(String sday) {
-        String day = "";
-        switch (sday) {
-            case "01":
-                day = "Monday";
-                break;
-            case "02":
-                day = "Thuesday";
-                break;
-            case "03":
-                day = "Wednesday";
-                break;
-            case "04":
-                day = "Thursday";
-                break;
-            case "05":
-                day = "Friday";
-                break;
-            case "06":
-                day = "Saturday";
-                break;
-            case "07":
-                day = "Sunday";
-                break;
-
-
+        } catch (ParseException e) {
+            System.out.println("ParseException occured: " + e.getMessage());
         }
-        return day;
-
+        return  fechaTexto;
     }
+
+
+
+
+
+
+
+
+
 }
 
-    // Pass monthName param as "August"
-   /* public int getMonthNumber(String monthName) throws ParseException {
-        Date date = new SimpleDateFormat("MMMM").parse(monthName);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        System.out.println(calendar.get(Calendar.MONTH) + 1);
-        return calendar.get(Calendar.MONTH) + 1;
-    }*/
 
-  /*  public String getDateComplet(String date1) throws ParseException {
-        String result = "";
-        Date date = new SimpleDateFormat("EEE,MMM d", Locale.getDefault()).parse(date1);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return result;
-    }*/
 
-    // Pass date param as "Sun, Jul 1"
-   /* public String getMonthNameInThreeChars(String date) {
-        return date.substring(5, 8);
-    }*/
+
+
+
 
     /*public void setDatapicker(String date)throws IOException, ParseException {
 

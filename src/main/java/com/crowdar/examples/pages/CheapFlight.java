@@ -2,13 +2,17 @@ package com.crowdar.examples.pages;
 
 import com.crowdar.core.pageObjects.PageBaseMobile;
 import com.crowdar.examples.constants.CheapFlightConstants;
+import com.sun.mail.imap.protocol.ID;
 import io.appium.java_client.MobileBy;
+import io.appium.java_client.android.AndroidElement;
 import io.cucumber.java.sl.In;
 import io.cucumber.java8.Id;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Assert;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +31,7 @@ public class CheapFlight extends CheapBase {
     public static final String DAY_MONTH_ACCID = "Friday, May 28 button";
     public static final String MOUNTHCURRENT_ACCID = "May 2021 current month";
     public static final String MONTHCURRENT_ID = "com.cheaptickets:id/current_month";
-    public static final String DONECalendar_BUTTON_ID = "";
+    public static final String DONECalendar_BUTTON_ID = "android:id/button1";
     public static final String NEXTMOUTH_BUTTON_ID = "com.cheaptickets:id/next_month";
 
     public static final String TRAVELER_BUTTON_XPATH = "//android.widget.LinearLayout[@content-desc=\"Number of travelers. Button. Opens dialog. 1 traveler\"]/android.widget.LinearLayout/android.view.ViewGroup/android.widget.EditText";
@@ -48,13 +52,20 @@ public class CheapFlight extends CheapBase {
 
     public static final String SEARCH_BUTTON_ID = "com.cheaptickets:id/search_btn";
 
-
+    //busquedas
     public static final String AeroparqueArg_origen_xpath = "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[3]/android.widget.LinearLayout/android.widget.TextView";
     public static final String AeropuertoBrasil_destino = "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[2]/android.widget.LinearLayout/android.widget.TextView";
-
+    //public static final String
 
     public String xpathr = "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[2]";
     public String LIST_RESULT_ID = "com.cheaptickets:id/suggestion_list";
+
+    public static final String MSJ_TEXT_ID = "com.cheaptickets:id/empty_state_body";
+    public static final String ICON_IMG_ID = "com.cheaptickets:id/empty_state_icon";
+    public static final String EDIT_BUTTON_ID = "com.cheaptickets:id/uds_button_label";
+
+    public static final String LABEL_RESULTS_ID = "com.cheaptickets:id/flight_results_price_header";
+    public static final String ITEM_LIST_XPATH = "//android.widget.FrameLayout[@content-desc=\"Flight time is 14:20 to 17:00 with price $308. Flying with Aerolineas Argentinas. The flight duration is 2 hours 40 minutes with 1 stops RES to PRA. 0 hours 50 minutes. Layover 0 hours 50 minutes. PRA to AEP. 1 hour 0 minutes. Preferred class Economy + Economy Button\"]/android.widget.LinearLayout/android.widget.LinearLayout";
 
 
     public CheapFlight(RemoteWebDriver driver) {
@@ -62,7 +73,7 @@ public class CheapFlight extends CheapBase {
         this.url = "";
     }
 
-
+    //completa los campos de origen y destino
     public void completFromAndTo(String origin, String destino) {
         waitForElementPresence(By.xpath(FROM_BUTTON_XPATH));
         clickElement(By.xpath(FROM_BUTTON_XPATH));
@@ -74,95 +85,53 @@ public class CheapFlight extends CheapBase {
 
     }
 
-    //verifica la lista no este vacia y hace un click sobre el elemento deberia separar y haga uno y otro por separado?!
-   /* public void selectElementList(int id) {
-        List<WebElement> webElementList = getWebElements(By.id(LIST_RESULT_ID));
-        if ((webElementList.size() > 0) & id < webElementList.size()) {
-            System.out.printf("la lista tiene elementos");
-            webElementList.get(id).click();
-        } else {
-            System.out.printf("No hay resutados para la busqueda");
-
-        }
-    }*/
-
-
-    public void setDates(String ida, String vuelta) {
-        // clickElement(By.xpath(DATES_BUTTON_XPATH));
-        String fecha1 = convertDate(ida);
-        String fecha2 = convertDate(vuelta);
+    //establece las fechas pasadas por parametro
+    public void setDates(String ida, String vuelta) throws IOException, ParseException {
+        String fecha1 = convertDateTravel(ida);
+        String fecha2 = convertDateTravel(vuelta);
         isElementPresent(By.id(MOUNTHCURRENT_ACCID));
-        List<WebElement> mes = getWebElements(By.id(MONTH_ID));
-        //busca la primer fecha en el calendario
 
-
-        try {
-            for (int i = 0; i < mes.size(); i++) {
-                String element = mes.get(i).getAttribute("AccesibilityID");
-                //String namefecha = element.getAttribute("content-desc");
-                if (element.contains(fecha1)) {
-                    mes.get(i).click();
-                } else {
-                    System.out.println("Error no se encontro");
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error");
-        }
-
-        //busca la segunda fecha en el calendario
-        for (int i = 0; i < mes.size(); i++) {
-            WebElement element = mes.get(i);
-            String namefecha = element.getAttribute("content-desc").toString();
-            if (namefecha.contains(fecha2)) {
-                System.out.println(element.getText());
-                element.click();
-            } else {
-                System.out.println("Error no se encontro");
+        if (fecha1.isEmpty() || fecha2.isEmpty()) {
+            System.out.println("Fechas vacias");
+        } else {
+            try {
+                driver.findElement(MobileBy.AccessibilityId(fecha1)).click();
+                driver.findElement(MobileBy.AccessibilityId(fecha2)).click();
+                clickElement(By.id(DONECalendar_BUTTON_ID));
+            } catch (Exception e) {
+                System.out.println("Error ");
             }
         }
-        //clickElement(By.id(DONECalendar_BUTTON_ID));
     }
 
-
-    //refactoriza un elemento de una lista obtenida
-    public String refactorXpath(Integer ID) {
-        String result = "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout/androidx.recyclerview.widget.RecyclerView/android.widget.LinearLayout[" + ID + "]";
-        return result;
-    }
 
     //le da tantos clicks como viajeros sean
     public void setTraveler(Integer adult, Integer child) {
         clickElement(By.xpath(TRAVELER_BUTTON_XPATH));
-
         if (adult == 1) {
-
         } else {
             iteraClick(adult, ADULTADD_BUTTON_XPATH);
         }
-
         iteraClick(child, CHILDADD_BUTTON_XPATH);
         clickElement(MobileBy.id(DONEP_BUTTON_ID));
     }
 
 
     public void setPreferenseClass(Integer tipo) {
-        //  clickElement(By.xpath(PREFERENCE_BUTTON_XPATH));
+        clickElement(By.xpath(PREFERENCE_BUTTON_XPATH));
 
         switch (tipo) {
-
             case 1:
-                clickElement(By.xpath(FIRST_RADIO_ID));
+                clickElement(By.id(FIRST_RADIO_ID));
                 break;
             case 2:
-                clickElement(By.xpath(BUSINESS_RADIO_ID));
+                clickElement(By.id(BUSINESS_RADIO_ID));
                 break;
             case 3:
-                clickElement(By.xpath(PREMIUM_RADIO_ID));
+                clickElement(By.id(PREMIUM_RADIO_ID));
                 break;
             case 4:
-                clickElement(By.xpath(ECONOMIC_RADIO_ID));
+                clickElement(By.id(ECONOMIC_RADIO_ID));
                 break;
 
         }
@@ -172,76 +141,22 @@ public class CheapFlight extends CheapBase {
 
     public void clickButtonSearch() {
         clickElement(By.id(SEARCH_BUTTON_ID));
+        //waitForElementPresence();
 
     }
 
-    //devuelve el formato Mes numero como string
-    public String convertDate(String fecha) {
-        int x = 3; //index mes
-        int y = 5;
-        int w = 0; //index fecha
-        int s = 2;
-        String result = "";
-        if (fecha.isEmpty()) {
-            System.out.println("Error fecha vacia");
-
+    public void selectListFlight() {
+        if (isElementPresent(By.id(MSJ_TEXT_ID)) && isElementPresent(By.id(ICON_IMG_ID))) {
+            System.out.println("No hay elementos en la busqueda");
+            clickElement(By.id(EDIT_BUTTON_ID));
         } else {
-            String smes = fecha.substring(x, y);
-            String sfecha = fecha.substring(w, s);
+            Assert.assertTrue(isElementPresent(By.id(LABEL_RESULTS_ID)));
+            if (isElementPresent(By.xpath(ITEM_LIST_XPATH))) {
+                clickElement(By.xpath(ITEM_LIST_XPATH));
+            }
 
-            result = getMonth(smes) + " " + sfecha;
-        }
-        //  String mes = fecha;
-        return result;
-    }
-
-
-    //recibe la fecha en su formato dd/mm y obtine el nombre del mes
-    public String getMonth (String smes){
-        String month = "";
-        switch (smes) {
-            case "01":
-                month = "January";
-                break;
-            case "02":
-                month = "February";
-                break;
-            case "03":
-                month = "March";
-                break;
-            case "04":
-                month = "April";
-                break;
-            case "05":
-                month = "May";
-                break;
-            case "06":
-                month = "June";
-                break;
-            case "07":
-                month = "July";
-                break;
-            case "08":
-                month = "August";
-                break;
-            case "09":
-                month = "September";
-                break;
-            case "10":
-                month = "October";
-                break;
-            case "11":
-                month = "November";
-                break;
-            case "12":
-                month = "December";
-                break;
-            default:
-                System.out.print("Error fuera de rango");
 
         }
-
-        return month;
     }
 
 
